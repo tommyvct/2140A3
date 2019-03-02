@@ -1,0 +1,59 @@
+COMMENT Starting tests...
+COMMENT ===Test #1===
+NEW C 3 + 5 4 - *
+PRINTINFIX
+SIMPLIFY
+COMMENT Satisfactory simplification: ( ( C + 3 ) * 1 ) Fully simplified: ( C + 3 )
+PRINTINFIX
+PRINTPOSTFIX
+PRINTPREFIX
+COMMENT ===Test #2===
+NEW a 1 ^ b 0 * a b + 7 * - +
+PRINTINFIX
+PRINTPREFIX
+SIMPLIFY
+COMMENT Satisfactory simplification: ( a + ( 0 - ( ( a + b ) * 7 ) ) ) Better simplification: ( a - ( ( a + b ) * 7 ) )
+PRINTINFIX
+PRINTPREFIX
+PRINTPOSTFIX
+COMMENT ===Test #3===
+NEW ^ + 4 F * 0 G
+PRINTINFIX
+SIMPLIFY
+PRINTINFIX
+COMMENT ===Test #4===
+NEW ^ * 0 G + 4 F
+PRINTINFIX
+SIMPLIFY
+PRINTINFIX
+COMMENT ===Test #5===
+NEW - ^ - 50 30 2 * 3 + 247 63
+PRINTINFIX
+PRINTPREFIX
+PRINTPOSTFIX
+SIMPLIFY
+PRINTINFIX
+PRINTPREFIX
+PRINTPOSTFIX
+COMMENT ===Test #6===
+NEW 3 C + 3 C + - 4 6 ^ * 5 D * 8 9 + G ^ F - 0 E 7 + * ^ + -
+PRINTPOSTFIX
+PRINTINFIX
+PRINTPREFIX
+SIMPLIFY
+PRINTPOSTFIX
+PRINTINFIX
+PRINTPREFIX
+COMMENT ===Test #7===
+NEW ^ * * X - W ^ U V + Z Y - - + T S * ^ P Q R - * N O + - * J I K + M L
+PRINTPREFIX
+SIMPLIFY
+PRINTPREFIX
+PRINTPOSTFIX
+PRINTINFIX
+COMMENT ===Test #8===
+NEW + * * 1 ^ C 2 - 5 5 * - 3 + 2 1 ^ - A B 0
+PRINTINFIX
+SIMPLIFY
+PRINTINFIX
+COMMENT End of tests.

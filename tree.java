@@ -1,13 +1,13 @@
 // tree.java
 // demonstrates binary tree
 // to run this program: C>java TreeApp
-import java.io.*;
+// import java.io.*;
 import java.util.*;               // for Stack class
 ////////////////////////////////////////////////////////////////
 class Node
    {
    public int iData;              // data item (key)
-   public double dData;           // data item
+   public int data;           // data item
    public Node leftChild;         // this node's left child
    public Node rightChild;        // this node's right child
 
@@ -16,7 +16,7 @@ class Node
       System.out.print('{');
       System.out.print(iData);
       System.out.print(", ");
-      System.out.print(dData);
+      System.out.print(data);
       System.out.print("} ");
       }
    }  // end class Node
@@ -44,11 +44,11 @@ class Tree
       return current;                    // found it
       }  // end find()
 // -------------------------------------------------------------
-   public void insert(int id, double dd)
+   public void insert(int id, int dd)
       {
       Node newNode = new Node();    // make new node
       newNode.iData = id;           // insert data
-      newNode.dData = dd;
+      newNode.data = dd;
       if(root==null)                // no node in root
          root = newNode;
       else                          // root occupied
@@ -271,6 +271,8 @@ class Tree
       }  // end displayTree()
 // -------------------------------------------------------------
    }  // end class Tree
+
+/* 
 ////////////////////////////////////////////////////////////////
 class TreeApp
    {
@@ -363,3 +365,4 @@ class TreeApp
 // -------------------------------------------------------------
    }  // end class TreeApp
 ////////////////////////////////////////////////////////////////
+ */

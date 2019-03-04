@@ -26,6 +26,11 @@ class Queue
         }
     }
 
+    public int size()
+    {
+        return this.size;
+    }
+
     public boolean enqueue(TreeNode toEnqueue)
     {
         if (toEnqueue == null)
@@ -37,15 +42,14 @@ class Queue
         {
             this.front = new Node(toEnqueue);
             this.end = this.front;
-            this.size++;
         }
         else
         {
             this.end.setNext(new Node(toEnqueue));
             this.end = this.end.getNext();
-            this.size++;
         }
-
+        
+        this.size++;
         return true;
     }
 
@@ -455,5 +459,131 @@ class Tree
         }
     }
 
+    public void displayTree() 
+    {
+        Stack globalStack = new Stack();
+        int nBlanks = 32;
+        boolean isRowEmpty = false;
+
+        globalStack.push(root);
+        System.out.println("......................................................");
+
+        while (isRowEmpty == false) 
+        {
+            Stack localStack = new Stack();
+
+            isRowEmpty = true;
+    
+            for (int j = 0; j < nBlanks; j++)
+            {
+                System.out.print(' ');
+            }
+    
+            while (globalStack.isEmpty() == false) 
+            {
+                TreeNode temp = (TreeNode) globalStack.pop();
+
+                if (temp != null) 
+                {
+                    System.out.print(temp.getData());
+                    localStack.push(temp.getLeftChild());
+                    localStack.push(temp.getRightChild());
+    
+                    if (temp.getLeftChild() != null || temp.getRightChild() != null)
+                    {
+                        isRowEmpty = false;
+                    }
+                } 
+                else 
+                {
+                    System.out.print("--");
+                    localStack.push(null);
+                    localStack.push(null);
+                }
+
+                for (int j = 0; j < nBlanks * 2 - 2; j++)
+                {
+                    System.out.print(' ');
+                }
+            } 
+
+            System.out.println();
+            nBlanks /= 2;
+            while (localStack.isEmpty() == false)
+            {
+                globalStack.push(localStack.pop());
+            }
+        } 
+        System.out.println("......................................................");
+    }
   
 }
+
+class Stack
+{
+    private Node top;
+    private int size;
+
+    public Stack()
+    {
+        this.top = null;
+        this.size = 0;
+    }
+
+    public boolean isEmpty()
+    {
+        if (this.size == 0)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    public int size()
+    {
+        return this.size;
+    }
+
+    public boolean push(TreeNode toPush)
+    {
+        if (toPush == null)
+        {
+            return false;
+        }
+
+        if (this.size == 0)
+        {
+            this.top = new Node(toPush);
+        }
+        else
+        {
+            this.top.setNext(new Node(toPush));
+            this.top = this.top.getNext();
+        }
+
+        this.size++;
+        return true;
+    }
+
+    public TreeNode pop()
+    {
+        if (this.size == 0)
+        {
+            return null;
+        }
+
+        TreeNode ret = this.top.getTreeNode();
+
+        this.top = this.top.getNext();
+        return ret;
+    }
+
+    public TreeNode peek()
+    {
+        return this.top.getTreeNode();
+    }
+}
+

@@ -1,5 +1,7 @@
 /**
- * a
+ * {@code Queue} class powered by linked list.
+ * 
+ * @author Tommy Wu (7852291)
  */
 class Queue 
 {
@@ -7,6 +9,11 @@ class Queue
     private Node end;
     private int size;
     
+    /**
+     * Constructor for a new instance of {@code Queue} object.<p>
+     * 
+     * Create an empty {@code Queue}
+     */
     public Queue()
     {
         this.front = null;
@@ -14,6 +21,11 @@ class Queue
         this.size = 0;
     }
 
+    /**
+     * Tell if this {@code Queue} instance is empty or not
+     * 
+     * @return {@code true} if empty, {@code false} if not
+     */
     public boolean isEmpty()
     {
         if (this.size == 0)
@@ -26,11 +38,22 @@ class Queue
         }
     }
 
+    /**
+     * Tell the size of this {@code Queue} instance
+     * 
+     * @return size of this {@code Queue} instance
+     */
     public int size()
     {
         return this.size;
     }
 
+    /**
+     * Put a {@code TreeNode} in the end of this {@code Queue} instance
+     * 
+     * @param toEnqueue {@code TreeNode} to enqueue
+     * @return {@code true} if {@code toEnqueue} is valid and added in this {@code Queue} instance, {@code false} if not
+     */
     public boolean enqueue(TreeNode toEnqueue)
     {
         if (toEnqueue == null)
@@ -53,6 +76,11 @@ class Queue
         return true;
     }
 
+    /**
+     * Remove and return the {@code TreeNode} in the front of this {@code Queue} instance
+     * 
+     * @return {@code TreeNode} in the front of this {@code Queue} instance
+     */
     public TreeNode dequeue()
     {
         if (this.size <= 0)
@@ -68,6 +96,11 @@ class Queue
         }
     }
 
+    /**
+     * Peek the front of this {@code Queue} instance object without removing it
+     * 
+     * @return {@code TreeNode} in the front of this {@code Queue} instance
+     */
     public TreeNode peek()
     {
         if (this.size <= 0)
@@ -81,12 +114,25 @@ class Queue
     }
 }
 
+/**
+ * {@code TreeNode} class, node class for {@code Tree} class.<p>
+ * It carries one integer data.
+ * 
+ * @author Tommy Wu (7852291)
+ */
 class TreeNode
 {
     private int data;   // data to store
     private TreeNode leftChild;
     private TreeNode rightChild;
 
+    /**
+     * Constructor for a new instance of {@code TreeNode} object.<p>
+     * 
+     * Create an {@code TreeNode} with given data, set the left and right child as {@code null}.
+     * 
+     * @param newData data to initialize a {@code TreeNode}
+     */
     public TreeNode(int newData)
     {
         this.data = newData;
@@ -143,6 +189,11 @@ class TreeNode
     }   
 }
 
+/**
+ * {@code Node} class powered {@code Queue} and {@code Stack}.
+ * 
+ * @author Tommy Wu (7852291)
+ */
 class Node
 {
     private TreeNode treeNode;
@@ -193,6 +244,13 @@ class Node
     }
 }
 
+
+/**
+ * {@code Tree} class implemented a binary tree.<p>
+ * This tree carries one integer data per node.
+ * 
+ * @author Tommy Wu (7852291)
+ */
 class Tree
 {
     private TreeNode root;
@@ -519,6 +577,11 @@ class Tree
   
 }
 
+/**
+ * {@code Stack} class powered by linked list.
+ * 
+ * @author Tommy Wu (7852291)
+ */
 class Stack
 {
     private Node top;
@@ -586,4 +649,3 @@ class Stack
         return this.top.getTreeNode();
     }
 }
-

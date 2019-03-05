@@ -199,6 +199,14 @@ class Node
     private TreeNode treeNode;
     private Node next;
 
+    /**
+     * Constructor for a new instance of {@code Node} object for implementing {@code Stack} and {@code Queue}.<p>
+     * 
+     * Create an {@code Node} with given data and reference to the next {@code Node}.
+     * 
+     * @param newData data to initialize a {@code TreeNode}
+     * @param u
+     */
     public Node(TreeNode newTreeNode, Node newNext)
     {
         this.treeNode = newTreeNode;

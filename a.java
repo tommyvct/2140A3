@@ -698,9 +698,9 @@ class Tree
     }
 
     /**
-     * Display the whole {@code Tree}.
+     * Display the whole {@code Tree}, Depth-First Traversal Version.
      */
-    public void displayTree() 
+    public void displayTreeDFT() 
     {
         Stack globalStack = new Stack();
         int nBlanks = 32;
@@ -757,5 +757,12 @@ class Tree
         } 
         System.out.println("......................................................");
     }
-  
+
+    public void displayTreeBFT()
+    {
+        Queue toPrint = new Queue();
+        TreeNode current = this.root;
+
+        
+    }
 }

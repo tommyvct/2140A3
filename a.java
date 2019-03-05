@@ -623,6 +623,14 @@ class Tree
         return successor;
     }
 
+    /**
+     * Print the {@code Tree} object in given traversals.
+     * 
+     * @param traverseType Specifies the desired traverse type. 
+     * {@code 1} for preorder traversal,
+     * {@code 2} for inorder traversal, and
+     * {@code 3} for postorder traversal.
+     */
     public void traverse(int traverseType) 
     {
         switch (traverseType) 
@@ -644,6 +652,11 @@ class Tree
         System.out.println();
     }
 
+    /**
+     * Print the {@code Tree} from given {@code TreeNode} in preorder until the end of the {@code Tree}.
+     * 
+     * @param localRoot where to start print
+     */
     private void preOrder(TreeNode localRoot) 
     {
         if (localRoot != null) 
@@ -654,6 +667,11 @@ class Tree
         }
     }
 
+    /**
+     * Print the {@code Tree} from given {@code TreeNode} inorder until the end of the {@code Tree}.
+     * 
+     * @param localRoot where to start print
+     */
     private void inOrder(TreeNode localRoot) 
     {
         if (localRoot != null) 
@@ -664,6 +682,11 @@ class Tree
         }
     }
 
+    /**
+     * Print the {@code Tree} from given {@code TreeNode} in postorder until the end of the {@code Tree}.
+     * 
+     * @param localRoot where to start print
+     */
     private void postOrder(TreeNode localRoot) 
     {
         if (localRoot != null) 
@@ -674,6 +697,9 @@ class Tree
         }
     }
 
+    /**
+     * Display the whole {@code Tree}.
+     */
     public void displayTree() 
     {
         Stack globalStack = new Stack();

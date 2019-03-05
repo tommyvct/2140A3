@@ -1,120 +1,4 @@
 /**
- * {@code Queue} class powered by linked list.
- * 
- * @author Tommy Wu (7852291)
- */
-class Queue 
-{
-    private Node front;
-    private Node end;
-    private int size;
-    
-    /**
-     * Constructor for a new instance of {@code Queue} object.<p>
-     * 
-     * Create an empty {@code Queue}
-     */
-    public Queue()
-    {
-        this.front = null;
-        this.end = null;
-        this.size = 0;
-    }
-
-    /**
-     * Tell if this {@code Queue} instance is empty or not
-     * 
-     * @return {@code true} if empty, {@code false} if not
-     */
-    public boolean isEmpty()
-    {
-        if (this.size == 0)
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Tell the size of this {@code Queue} instance
-     * 
-     * @return size of this {@code Queue} instance
-     */
-    public int size()
-    {
-        return this.size;
-    }
-
-    /**
-     * Put a {@code TreeNode} in the end of this {@code Queue} instance
-     * 
-     * @param toEnqueue {@code TreeNode} to enqueue
-     * @return {@code true} if {@code toEnqueue} is valid and added in this {@code Queue} instance, {@code false} if not
-     */
-    public boolean enqueue(TreeNode toEnqueue)
-    {
-        if (toEnqueue == null)
-        {
-            return false;
-        }
-
-        if (this.size == 0)
-        {
-            this.front = new Node(toEnqueue);
-            this.end = this.front;
-        }
-        else
-        {
-            this.end.setNext(new Node(toEnqueue));
-            this.end = this.end.getNext();
-        }
-        
-        this.size++;
-        return true;
-    }
-
-    /**
-     * Remove and return the {@code TreeNode} in the front of this {@code Queue} instance
-     * 
-     * @return {@code TreeNode} in the front of this {@code Queue} instance
-     */
-    public TreeNode dequeue()
-    {
-        if (this.size <= 0)
-        {
-            return null;
-        }
-        else 
-        {
-            TreeNode ret = front.getTreeNode();
-            this.front = this.front.getNext();
-            this.size--;
-            return ret;
-        }
-    }
-
-    /**
-     * Peek the front of this {@code Queue} instance object without removing it
-     * 
-     * @return {@code TreeNode} in the front of this {@code Queue} instance
-     */
-    public TreeNode peek()
-    {
-        if (this.size <= 0)
-        {
-            return null;
-        }
-        else 
-        {
-            return this.front.getTreeNode();
-        }
-    }
-}
-
-/**
  * {@code TreeNode} class, node class for {@code Tree} class.<p>
  * It carries one integer data.
  * 
@@ -157,7 +41,7 @@ class TreeNode
     }
 
     /**
-     * @return the leftChild
+     * @return the reference to the leftChild
      */
     public TreeNode getLeftChild() 
     {
@@ -165,7 +49,7 @@ class TreeNode
     }
 
     /**
-     * @param leftChild the leftChild to set
+     * @param leftChild the reference to the leftChild to set
      */
     public void setLeftChild(TreeNode leftChild) 
     {
@@ -173,7 +57,7 @@ class TreeNode
     }
 
     /**
-     * @return the rightChild
+     * @return the reference to the rightChild
      */
     public TreeNode getRightChild() 
     {
@@ -181,13 +65,14 @@ class TreeNode
     }
 
     /**
-     * @param rightChild the rightChild to set
+     * @param rightChild the reference to the rightChild to set
      */
     public void setRightChild(TreeNode rightChild) 
     {
         this.rightChild = rightChild;
     }   
 }
+
 
 /**
  * {@code Node} class powered {@code Queue} and {@code Stack}.
@@ -205,7 +90,7 @@ class Node
      * Create an {@code Node} with given data and reference to the next {@code Node}.
      * 
      * @param newData data to initialize a {@code TreeNode}
-     * @param u
+     * @param newNext reference to the next {@code Node}
      */
     public Node(TreeNode newTreeNode, Node newNext)
     {
@@ -213,6 +98,13 @@ class Node
         this.next = newNext;
     }
 
+    /**
+     * Constructor for a new instance of {@code Node} object for implementing {@code Stack} and {@code Queue}.<p>
+     * 
+     * Create an {@code Node} with given {@code TreeNode} data and set reference to the next {@code Node} to {@code null}.
+     * 
+     * @param newData data to initialize a {@code TreeNode}
+     */
     public Node(TreeNode newTreeNode)
     {
         this.treeNode = newTreeNode;
@@ -220,7 +112,7 @@ class Node
     }
 
     /**
-     * @return the treeNode
+     * @return the reference to the {@code TreeNode} data
      */
     public TreeNode getTreeNode() 
     {
@@ -228,7 +120,7 @@ class Node
     }
 
     /**
-     * @param treeNode the treeNode to set
+     * @param treeNode the reference to the {@code TreeNode} data to set
      */
     public void setTreeNode(TreeNode treeNode) 
     {
@@ -236,7 +128,7 @@ class Node
     }
 
     /**
-     * @return the next
+     * @return the reference to the next {@code Node}
      */
     public Node getNext() 
     {
@@ -244,11 +136,240 @@ class Node
     }
 
     /**
-     * @param next the next to set
+     * @param next the reference to the next {@code Node} to set
      */
     public void setNext(Node next) 
     {
         this.next = next;
+    }
+}
+
+
+/**
+ * {@code Queue} class powered by linked list.
+ * 
+ * @author Tommy Wu (7852291)
+ */
+class Queue 
+{
+    private Node front;
+    private Node end;
+    private int size;
+    
+    /**
+     * Constructor for a new instance of {@code Queue} object.<p>
+     * 
+     * Creates an empty {@code Queue}.
+     */
+    public Queue()
+    {
+        this.front = null;
+        this.end = null;
+        this.size = 0;
+    }
+
+    /**
+     * Tell if this {@code Queue} instance is empty or not
+     * 
+     * @return {@code true} if empty, {@code false} if not
+     */
+    public boolean isEmpty()
+    {
+        if (this.size == 0)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Tell the size of this {@code Queue} instance
+     * 
+     * @return size of this {@code Queue} instance
+     */
+    public int size()
+    {
+        return this.size;
+    }
+
+    /**
+     * Put a {@code TreeNode} in the end of this {@code Queue} instance
+     * 
+     * @param toEnqueue {@code TreeNode} to enqueue
+     * @return {@code true} if {@code toEnqueue} is not {@code null} and added in this {@code Queue} instance, {@code false} if not
+     */
+    public boolean enqueue(TreeNode toEnqueue)
+    {
+        if (toEnqueue == null)
+        {
+            return false;
+        }
+
+        if (this.isEmpty())
+        {
+            this.front = new Node(toEnqueue);
+            this.end = this.front;
+        }
+        else
+        {
+            this.end.setNext(new Node(toEnqueue));
+            this.end = this.end.getNext();
+        }
+        
+        this.size++;
+        return true;
+    }
+
+    /**
+     * Remove and return the {@code TreeNode} in the front of this {@code Queue} instance
+     * 
+     * @return {@code TreeNode} in the front of this {@code Queue} instance, or {@code null} if this {@code Queue} instance is empty
+     */
+    public TreeNode dequeue()
+    {
+        if (this.isEmpty())
+        {
+            return null;
+        }
+        else 
+        {
+            TreeNode ret = front.getTreeNode();
+            this.front = this.front.getNext();
+            this.size--;
+            return ret;
+        }
+    }
+
+    /**
+     * Peek the front of this {@code Queue} instance object without removing it
+     * 
+     * @return {@code TreeNode} in the front of this {@code Queue} instance, or {@code null} if this {@code Queue} instance is empty
+     */
+    public TreeNode peek()
+    {
+        if (this.isEmpty())
+        {
+            return null;
+        }
+        else 
+        {
+            return this.front.getTreeNode();
+        }
+    }
+}
+
+
+/**
+ * {@code Stack} class powered by linked list.
+ * 
+ * @author Tommy Wu (7852291)
+ */
+class Stack
+{
+    private Node top;
+    private int size;
+
+    /**
+     * Constructor for a new instance of {@code Queue} object.<p>
+     * 
+     * Creates an empty {@code Stack}.
+     */
+    public Stack()
+    {
+        this.top = null;
+        this.size = 0;
+    }
+
+    /**
+     * Tell if this {@code Stack} instance is empty or not
+     * 
+     * @return {@code true} if empty, {@code false} if not
+     */
+    public boolean isEmpty()
+    {
+        if (this.size == 0)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Tell the size of this {@code Stack} instance
+     * 
+     * @return size of this {@code Stack} instance
+     */
+    public int size()
+    {
+        return this.size;
+    }
+
+    /**
+     * Push a {@code TreeNode} on the top of this {@code Stack} instance.
+     * 
+     * @param toPush {@code TreeNode} to push
+     * @return {@code true} if {@code toPsh} is not {@code null} and added in this {@code Queue} instance, {@code false} if not
+     */
+    public boolean push(TreeNode toPush)
+    {
+        if (toPush == null)
+        {
+            return false;
+        }
+
+        if (this.isEmpty())
+        {
+            this.top = new Node(toPush);
+        }
+        else
+        {
+            this.top.setNext(new Node(toPush));
+            this.top = this.top.getNext();
+        }
+
+        this.size++;
+        return true;
+    }
+
+    /**
+     * Remove and return the {@code TreeNode} on the top of this {@code Stack} instance
+     * 
+     * @return {@code TreeNode} on the top of this {@code Stack} instance, or {@code null} if this {@code Stack} instance is empty
+     */
+    public TreeNode pop()
+    {
+        if (this.isEmpty())
+        {
+            return null;
+        }
+
+        TreeNode ret = this.top.getTreeNode();
+
+        this.top = this.top.getNext();
+        return ret;
+    }
+
+    /**
+     * Peek on the top of this {@code Stack} instance object without removing it
+     * 
+     * @return {@code TreeNode} in the front of this {@code Stack} instance, or {@code null} if this {@code Queue} instance is empty
+     */
+    public TreeNode peek()
+    {
+        if (this.isEmpty())
+        {
+            return null;
+        }
+        else 
+        {
+            return this.top.getTreeNode();
+        }
     }
 }
 
@@ -264,12 +385,23 @@ class Tree
     private TreeNode root;
     private int treeSize;
 
+    /**
+     * Constructor for a new instance of {@code Tree} object.<p>
+     * 
+     * Creates an empty {@code Tree}.
+     */
     public Tree()
     {
         root = null;
         treeSize = 0;
     }
 
+    /**
+     * Find a {@code TreeNode} data in this instance of {@code Tree} object that contains the integer to find.
+     * 
+     * @param toFind the integer to find
+     * @return {@code TreeNode} object that contains the integer to find
+     */
     public TreeNode find(int toFind)
     {
         if (treeSize <= 0)
@@ -299,6 +431,11 @@ class Tree
         return current; // found it
     }
 
+    /**
+     * Insert the given data in this {@code Tree}.
+     * 
+     * @param toInsert integer data to insert
+     */
     public void insert(int toInsert)
     {
         TreeNode newTreeNode = new TreeNode(toInsert);   // make new node, insert data
@@ -340,6 +477,12 @@ class Tree
         }
     }
 
+    /**
+     * Delete a {@code TreeNode} data in this instance of {@code Tree} object that contains the integer to delete.
+     * 
+     * @param toDelete the integer to delete
+     * @return {@code true} if the integer to delete is found and deleted, {@code false} if the list is empty or the integer to delete is not found.
+     */
     public boolean delete(int toDelete)
     {
         if (treeSize <= 0)
@@ -451,6 +594,12 @@ class Tree
         return true; // success
     }
 
+    /**
+     * Get the Successor of the given {@code TreeNode} from this {@code Tree} instance.
+     * 
+     * @param delNode the {code TreeNode} to get it's successor
+     * @return the given {@code TreeNode}'s successor
+     */
     private TreeNode getSuccessor(TreeNode delNode) 
     {
         TreeNode successorParent = delNode;
@@ -583,77 +732,4 @@ class Tree
         System.out.println("......................................................");
     }
   
-}
-
-/**
- * {@code Stack} class powered by linked list.
- * 
- * @author Tommy Wu (7852291)
- */
-class Stack
-{
-    private Node top;
-    private int size;
-
-    public Stack()
-    {
-        this.top = null;
-        this.size = 0;
-    }
-
-    public boolean isEmpty()
-    {
-        if (this.size == 0)
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-
-    public int size()
-    {
-        return this.size;
-    }
-
-    public boolean push(TreeNode toPush)
-    {
-        if (toPush == null)
-        {
-            return false;
-        }
-
-        if (this.size == 0)
-        {
-            this.top = new Node(toPush);
-        }
-        else
-        {
-            this.top.setNext(new Node(toPush));
-            this.top = this.top.getNext();
-        }
-
-        this.size++;
-        return true;
-    }
-
-    public TreeNode pop()
-    {
-        if (this.size == 0)
-        {
-            return null;
-        }
-
-        TreeNode ret = this.top.getTreeNode();
-
-        this.top = this.top.getNext();
-        return ret;
-    }
-
-    public TreeNode peek()
-    {
-        return this.top.getTreeNode();
-    }
 }

@@ -1,3 +1,45 @@
+import java.util.Random;
+
+/**
+ * A Breadth-First Traversal of a Binary Tree <p>
+ * Main class for Assignment 3, Qustion 1.
+ * This class insert random integers into a binary tree,
+ * then print the tree using preoeder, inorder, postorder
+ * and breadth-first traversal.
+ * 
+ * @author Tommy Wu (7852291)
+ */
+public class a 
+{
+
+    public static void main(String[] args) 
+    {
+        Random rd = new Random();
+        Tree tree = new Tree();
+
+        // 1. Insert 20 random integers (with values between 1 and 999) in a binary search tree.
+        for (int i = 0; i < 20; i++) 
+        {
+            tree.insert(rd.nextInt(999) + 1);
+        }
+
+        // 2. Print the tree using a preorder traversal.
+        // 3. Print the tree using an inorder traversal.
+        // 4. Print the tree using a postorder traversal.
+        for (int i = 1; i <= 3; i++) 
+        {
+            tree.traverse(i);
+        }
+
+        // 5. Print the tree using a breadth-first traversal.
+        System.out.println();
+        tree.displayTreeBFT();
+    }
+}
+
+
+
+
 /**
  * {@code TreeNode} class, node class for {@code Tree} class.<p>
  * It carries one integer data.
@@ -764,5 +806,32 @@ class Tree
         TreeNode current = this.root;
 
         
+        if (this.root == null)
+        {
+            System.out.println("The tree is empty, nothing to print.");
+            return;
+        }
+        
+        System.out.print("Breadth-first traversal: ");
+        toPrint.enqueue(current);
+
+        while (!toPrint.isEmpty())
+        {
+            TreeNode temp = toPrint.dequeue();
+
+            System.out.print(temp.getData() + " ");
+
+            if (temp.getLeftChild() != null)
+            {
+                toPrint.enqueue(temp.getLeftChild());
+            }
+
+            if (temp.getRightChild() != null)
+            {
+                toPrint.enqueue(temp.getRightChild());
+            }
+        }
+
+        System.out.println();
     }
 }

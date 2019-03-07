@@ -1,9 +1,55 @@
+import java.io.FileReader;
+import java.util.Scanner;
+
 /**
  * WuTommyA3Q2
  */
-public class WuTommyA3Q2 {
-
+public class WuTommyA3Q2 
+{
     
+    public static void main(String[] args) 
+    {
+        try {
+            FileReader r =  new FileReader("A3Q2input.txt");
+            Scanner s = new Scanner(r);
+            ExpressionTree t = new ExpressionTree("");
+    
+            while (s.hasNextLine()) 
+            {
+                String buffer = s.nextLine();
+    
+                if (buffer.contains("COMMENT"))
+                {
+                    System.out.println(buffer.substring(8));
+                }
+                else if (buffer.contains("NEW"))
+                {
+                    t = new ExpressionTree(buffer.substring(4));
+                }
+                else if (buffer.contains("PRINTINFIX"))
+                {
+                    t.traverse(2);
+                }
+                else if (buffer.contains("PRINTPOSTFIX"))
+                {
+                    t.traverse(3);
+                }
+                else if (buffer.contains("PRINTPREFIX"))
+                {
+                    t.traverse(1);
+                }
+                else if (buffer.contains("SIMPLIFY"))
+                {
+                    t.simplify();
+                }
+            }
+            s.close();
+        } catch (Exception e) {
+            System.exit(3);
+        }
+
+
+    }
 }
 
 enum NodeType
@@ -168,7 +214,23 @@ class TreeNode
     public void setRightChild(TreeNode rightChild) 
     {
 		this.rightChild = rightChild;
-	}
+    }
+    
+    public void printTreeNode()
+    {
+        switch (this.nodeType) 
+        {
+            case OPERATOR:
+                System.out.print(operator);
+                break;
+            case VARIABLE:
+                System.out.print(varName);
+                break;
+            case NUMBER:
+                System.out.print(value);
+                break;
+        }
+    }
 }
 
 /**
@@ -490,7 +552,6 @@ class Stack
 class ExpressionTree
 {
     private TreeNode root;
-    private int treeSize;
 
     /**
      * Constructor for a new instance of {@code Tree} object.<p>
@@ -499,10 +560,14 @@ class ExpressionTree
      */
     public ExpressionTree(String newExpression)
     {
+        if (newExpression.equals(""))
+        {
+            return;
+        }
+
         String[] tokens = newExpression.split(" ");
         
         root = null;
-        treeSize = 0;
 
         if (isOperator(tokens[0]))// prefix
         {
@@ -510,7 +575,7 @@ class ExpressionTree
         }
         else  //postfix
         {
-            
+            this.root = makeTreePostfix(tokens);
         }
     }
 
@@ -568,6 +633,44 @@ class ExpressionTree
         return expressionQueue.dequeue();
     }
 
+    /**
+     * 
+     * 
+     */
+    private TreeNode makeTreePostfix(String[] postfixExpression)
+    {
+        Stack operand = new Stack();
+
+        for (int i = 0; i < postfixExpression.length; i++) 
+        {
+            if (isOperator(postfixExpression[i]))
+            {
+                char operator = postfixExpression[i].charAt(0);
+                TreeNode leftChild = operand.pop();
+                TreeNode rightChild = operand.pop();
+                TreeNode newRoot = new TreeNode(operator);
+                
+                newRoot.setLeftChild(leftChild);
+                newRoot.setRightChild(rightChild);
+
+                operand.push(newRoot);
+            }
+            else   //operand
+            {
+                if (Character.isDigit(postfixExpression[i].charAt(0)))   // number
+                {
+                    operand.push(new TreeNode(Integer.parseInt(postfixExpression[i])));
+                }
+                else         // var
+                {
+                    operand.push(new TreeNode(postfixExpression[i]));
+                }
+            }
+        }
+
+        return operand.pop();
+    }
+
     private boolean isOperand(TreeNode toDetermine)
     {
         if
@@ -607,7 +710,196 @@ class ExpressionTree
         {
             return false;
         }
-
     }
 
+        /**
+     * Print the {@code Tree} object in given traversals.
+     * 
+     * @param traverseType Specifies the desired traverse type. 
+     * {@code 1} for preorder traversal,
+     * {@code 2} for inorder traversal, and
+     * {@code 3} for postorder traversal.
+     */
+    public void traverse(int traverseType) 
+    {
+        switch (traverseType) 
+        {
+        case 1:
+            System.out.print("\nPreorder traversal: ");
+            preOrder(root);
+            break;
+        case 2:
+            System.out.print("\nInorder traversal:  ");
+            inOrder(root);
+            break;
+        case 3:
+            System.out.print("\nPostorder traversal: ");
+            postOrder(root);
+            break;
+        }
+
+        System.out.println();
+    }
+
+    /**
+     * Print the {@code Tree} from given {@code TreeNode} in preorder until the end of the {@code Tree}.
+     * 
+     * @param localRoot where to start print
+     */
+    private void preOrder(TreeNode localRoot) 
+    {
+        if (localRoot != null) 
+        {
+            localRoot.printTreeNode();
+            System.out.print(" ");
+            preOrder(localRoot.getLeftChild());
+            preOrder(localRoot.getRightChild());
+        }
+    }
+
+    /**
+     * Print the {@code Tree} from given {@code TreeNode} inorder until the end of the {@code Tree}.
+     * 
+     * @param localRoot where to start print
+     */
+    private void inOrder(TreeNode localRoot) 
+    {
+        if (localRoot != null) 
+        {
+            inOrder(localRoot.getLeftChild());
+            localRoot.printTreeNode();
+            System.out.print(" ");
+            inOrder(localRoot.getRightChild());
+        }
+    }
+
+    /**
+     * Print the {@code Tree} from given {@code TreeNode} in postorder until the end of the {@code Tree}.
+     * 
+     * @param localRoot where to start print
+     */
+    private void postOrder(TreeNode localRoot) 
+    {
+        if (localRoot != null) 
+        {
+            postOrder(localRoot.getLeftChild());
+            postOrder(localRoot.getRightChild());
+            localRoot.printTreeNode();
+            System.out.print(" ");
+        }
+    }
+
+    public void simplify()
+    {
+        Queue toCheck = new Queue();
+        TreeNode current = this.root;
+
+        if (this.root == null)
+        {
+            System.out.println("The tree is empty, nothing to simplify.");
+            return;
+        }
+
+        toCheck.enqueue(current);
+
+        while (!toCheck.isEmpty())
+        {
+            TreeNode temp = toCheck.dequeue();
+
+            if 
+            (
+                temp.getLeftChild().getNodeType() == NodeType.NUMBER &&
+                temp.getRightChild().getNodeType() == NodeType.NUMBER
+            )
+            {
+                int ans;
+                switch (temp.getOperator()) 
+                {
+                    case '+':
+                        ans = temp.getLeftChild().getValue() + temp.getRightChild().getValue();
+                        temp.setNodeType(NodeType.NUMBER);
+                        temp.setValue(ans);
+                        temp.setLeftChild(null);
+                        temp.setRightChild(null);
+                        break;
+                    case '-':
+                        ans = temp.getLeftChild().getValue() - temp.getRightChild().getValue();
+                        temp.setNodeType(NodeType.NUMBER);
+                        temp.setValue(ans);
+                        temp.setLeftChild(null);
+                        temp.setRightChild(null);
+                        break;
+
+                    case '*':
+                        ans = temp.getLeftChild().getValue() * temp.getRightChild().getValue();
+                        temp.setNodeType(NodeType.NUMBER);
+                        temp.setValue(ans);
+                        temp.setLeftChild(null);
+                        temp.setRightChild(null);
+                        break;
+
+                    case '^':
+                        ans = (int) Math.pow(temp.getLeftChild().getValue(), temp.getRightChild().getValue());
+                        temp.setNodeType(NodeType.NUMBER);
+                        temp.setValue(ans);
+                        temp.setLeftChild(null);
+                        temp.setRightChild(null);
+                        break;
+                }
+            }
+            else if
+            (
+                isOperand(temp.getLeftChild()) &&
+                temp.getRightChild().getNodeType() == NodeType.NUMBER &&
+                temp.getRightChild().getValue() == 1
+            )
+            {
+                temp.setNodeType(temp.getLeftChild().getNodeType());
+                if (temp.getNodeType() == NodeType.NUMBER)
+                {
+                    temp.setValue(temp.getLeftChild().getValue());
+                }
+                else if (temp.getNodeType() == NodeType.VARIABLE)
+                {
+                    temp.setVarName(temp.getLeftChild().getVarName());
+                }
+            }
+            else if
+            (
+                isOperand(temp.getRightChild()) &&
+                temp.getLeftChild().getNodeType() == NodeType.NUMBER &&
+                temp.getLeftChild().getValue() == 1 &&
+                temp.getOperator() != '^'
+            )
+            {
+                temp.setNodeType(temp.getRightChild().getNodeType());
+                if (temp.getNodeType() == NodeType.NUMBER)
+                {
+                    temp.setValue(temp.getRightChild().getValue());
+                }
+                else if (temp.getNodeType() == NodeType.VARIABLE)
+                {
+                    temp.setVarName(temp.getRightChild().getVarName());
+                }
+            }
+            else if
+            (
+                (
+                    isOperand(temp.getLeftChild()) &&
+                    temp.getRightChild().getNodeType() == NodeType.NUMBER &&
+                    temp.getRightChild().getValue() == 0
+                )
+                ||
+                (
+                    isOperand(temp.getRightChild()) &&
+                    temp.getLeftChild().getNodeType() == NodeType.NUMBER &&
+                    temp.getLeftChild().getValue() == 0
+                )
+            )
+            {
+                temp.setNodeType(NodeType.NUMBER);
+                temp.setValue(0);
+            }
+        }
+    }
 }

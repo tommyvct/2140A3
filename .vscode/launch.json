@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - WuTommyA3Q2",
+            "request": "launch",
+            "mainClass": "WuTommyA3Q2",
+            "projectName": "2140A3_65cae8e5"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - WuTommyA3Q1",
             "request": "launch",
             "mainClass": "WuTommyA3Q1",

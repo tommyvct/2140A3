@@ -415,7 +415,6 @@ class Stack
     }
 }
 
-
 /**
  * {@code Tree} class implemented a binary tree.<p>
  * This tree carries one integer data per node.

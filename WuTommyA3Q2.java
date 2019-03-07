@@ -499,69 +499,115 @@ class ExpressionTree
      */
     public ExpressionTree(String newExpression)
     {
-        String[] rawTokens = newExpression.split(" ");
-        // char[] tokens = new char[rawTokens.length];
-
-        // for (int i = 0; i < rawTokens.length; i++) 
-        // {
-        //     tokens[i] = rawTokens[i].charAt(0);
-        // }
+        String[] tokens = newExpression.split(" ");
         
         root = null;
         treeSize = 0;
 
-        if // prefix
-        (
-            rawTokens[0] == "+" &&
-            rawTokens[0] == "-" &&
-            rawTokens[0] == "*" &&
-            rawTokens[0] == "^"
-        )
+        if (isOperator(tokens[0]))// prefix
         {
-
-
+            this.root = makeTreePrefix(tokens);
         }
         else  //postfix
-        {
-
-        }
-    }
-
-    private TreeNode makeTreeInfix(String[] infixExpression)
-    {
-        Queue expressionQueue = new Queue();
-
-        for (int i = 0; i < infixExpression.length; i++) 
-        {
-            if // operator
-            (
-                infixExpression[i] == "+" &&
-                infixExpression[i] == "-" &&
-                infixExpression[i] == "*" &&
-                infixExpression[i] == "^"
-            )
-            {
-                expressionQueue.enqueue(new TreeNode(infixExpression[i].charAt(0)));
-            }
-            else if (Character.isDigit(infixExpression[i].charAt(0))) // number
-            {
-                expressionQueue.enqueue(new TreeNode(Integer.parseInt(infixExpression[i])));
-            }
-            else // variable
-            {
-                expressionQueue.enqueue(new TreeNode(infixExpression[i]));
-            }
-        }
-        
-        if (expressionQueue.peek().getNodeType() == NodeType.NUMBER)
-        {
-            expressionQueue.enqueue(expressionQueue.dequeue());
-        }
-        else
         {
             
         }
     }
 
+    private TreeNode makeTreePrefix(String[] prefixExpression)
+    {
+        Queue expressionQueue = new Queue();
+
+        for (int i = 0; i < prefixExpression.length; i++) 
+        {
+            if (isOperator(prefixExpression[i]))      // operator
+            {
+                expressionQueue.enqueue(new TreeNode(prefixExpression[i].charAt(0)));
+            }
+            else if (Character.isDigit(prefixExpression[i].charAt(0))) // number
+            {
+                expressionQueue.enqueue(new TreeNode(Integer.parseInt(prefixExpression[i])));
+            }
+            else // variable
+            {
+                expressionQueue.enqueue(new TreeNode(prefixExpression[i]));
+            }
+        }
+        
+        while (expressionQueue.size() > 1)  // exit when there is only one TreeNode, the root of the tree
+        {
+            if 
+            (
+                (
+                    expressionQueue.peek().getNodeType() == NodeType.NUMBER   ||   // number
+                    expressionQueue.peek().getNodeType() == NodeType.VARIABLE      // variable
+                )    
+                ||
+                (
+                    expressionQueue.peek().getLeftChild()  != null            &&   // have left child
+                    expressionQueue.peek().getRightChild() != null                 // or right child
+                )
+            )  // number or variable
+            {
+                expressionQueue.enqueue(expressionQueue.dequeue());           // put it back of the queue
+            }
+            else // operator
+            {
+                TreeNode operatorNode = expressionQueue.dequeue();
+    
+                if (isOperand(expressionQueue.peek(0)) && isOperand(expressionQueue.peek(1)))
+                {
+                    operatorNode.setLeftChild(expressionQueue.dequeue());       // append left child
+                    operatorNode.setRightChild(expressionQueue.dequeue());      // append right child
+                }
+    
+                expressionQueue.enqueue(operatorNode);
+            }
+        }
+
+        return expressionQueue.dequeue();
+    }
+
+    private boolean isOperand(TreeNode toDetermine)
+    {
+        if
+        (
+            (
+                toDetermine.getNodeType() == NodeType.NUMBER   ||  // number or var
+                toDetermine.getNodeType() == NodeType.VARIABLE     
+            )    
+            ||
+            (
+                toDetermine.getLeftChild()  != null            &&  // or have left child
+                toDetermine.getRightChild() != null                // or right child
+            )
+        )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private boolean isOperator(String toDetermine)
+    {
+        if // operator
+        (
+            toDetermine == "+" &&
+            toDetermine == "-" &&
+            toDetermine == "*" &&
+            toDetermine == "^"
+        )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
 
 }

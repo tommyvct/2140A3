@@ -2,14 +2,19 @@ import java.io.FileReader;
 import java.util.Scanner;
 
 /**
- * WuTommyA3Q2
+ * Binary expression Tree Driver class.<p>
+ * Main class for Assignment 3, Question 2.<p>
+ * 
+ * This class reads an instruction file, parse the instruction from file,
+ * and excute instructions accordingly. 
  */
 public class WuTommyA3Q2 
 {
     
     public static void main(String[] args) 
     {
-        try {
+        try 
+        {
             FileReader r =  new FileReader("A3Q2input.txt");
             Scanner s = new Scanner(r);
             ExpressionTree t = new ExpressionTree("");
@@ -24,31 +29,39 @@ public class WuTommyA3Q2
                 }
                 else if (buffer.contains("NEW"))
                 {
+                    System.out.println("New tree constructed");
                     t = new ExpressionTree(buffer.substring(4));
                 }
                 else if (buffer.contains("PRINTINFIX"))
                 {
                     t.traverse(2);
+                    System.out.println();
                 }
                 else if (buffer.contains("PRINTPOSTFIX"))
                 {
                     t.traverse(3);
+                    System.out.println();
                 }
                 else if (buffer.contains("PRINTPREFIX"))
                 {
                     t.traverse(1);
+                    System.out.println();
                 }
                 else if (buffer.contains("SIMPLIFY"))
                 {
-                    t.simplify();
+                    System.out.println("Tree simplified");
+                    for (int i = 0; i < 30; i++) 
+                    {
+                        t.simplify();
+                    }
                 }
             }
             s.close();
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             System.exit(3);
         }
-
-
     }
 }
 
@@ -216,6 +229,9 @@ class TreeNode
 		this.rightChild = rightChild;
     }
     
+    /**
+     * Print the current instance of {@code TreeNode}.
+     */
     public void printTreeNode()
     {
         switch (this.nodeType) 
@@ -505,8 +521,10 @@ class Stack
         }
         else
         {
-            this.top.setNext(new Node(toPush));
-            this.top = this.top.getNext();
+            Node newTop = new Node(toPush, this.top);
+            this.top = newTop;
+            // this.top.setNext(new Node(toPush));
+            // this.top = this.top.getNext();
         }
 
         this.size++;
@@ -528,6 +546,7 @@ class Stack
         TreeNode ret = this.top.getTreeNode();
 
         this.top = this.top.getNext();
+        this.size--;
         return ret;
     }
 
@@ -549,6 +568,13 @@ class Stack
     }
 }
 
+/**
+ * 
+ * This class create binary expression trees from the given prefix or postfix expression, 
+ * print the expression tree in postfix, infix and prefix form, and simplify the expression.
+ *
+ * @author Tommy Wu (7852291)
+ */
 class ExpressionTree
 {
     private TreeNode root;
@@ -556,7 +582,9 @@ class ExpressionTree
     /**
      * Constructor for a new instance of {@code Tree} object.<p>
      * 
-     * Creates an empty {@code Tree}.
+     * Auto detect the form of expression and parse given expression then generate tree accordingly.
+     * 
+     * @param newExpression {@code String} contains the expression to generate tree
      */
     public ExpressionTree(String newExpression)
     {
@@ -579,6 +607,25 @@ class ExpressionTree
         }
     }
 
+    
+    
+    /**
+     * Private method to generate a {@code ExpressionTree} from given prefix expression {@code String[]}.<p>
+     * 
+     *  If the front of the queue contains a numeric value, 
+     *      dequeue it and queue it back up at the end.
+     *  else, the front of the queue contains a operator
+     *      dequeue the operator at the front of the queue 
+     *      If (the next two elements are both numeric), 
+     *          remove them and from the tree
+     *          the first value in the queue is the left side of the expression, 
+     *          the second value is the right side  
+     *      else, 
+     *          queue the operator back up at the end.
+     * 
+     * @param postfixExpression prefix expression in {@code String[]} form
+     * @return the root of generated expression tree
+     */
     private TreeNode makeTreePrefix(String[] prefixExpression)
     {
         Queue expressionQueue = new Queue();
@@ -609,7 +656,7 @@ class ExpressionTree
                 )    
                 ||
                 (
-                    expressionQueue.peek().getLeftChild()  != null            &&   // have left child
+                    expressionQueue.peek().getLeftChild()  != null            &&   // don't have left child
                     expressionQueue.peek().getRightChild() != null                 // or right child
                 )
             )  // number or variable
@@ -634,10 +681,31 @@ class ExpressionTree
     }
 
     /**
+     * Private method to generate a {@code ExpressionTree} from given postfix expression {@code String[]}.<p>
      * 
+     * for every element in postfix expression,
+     *     if it is an operand, push it into stack,
+     *     else it is an operator,
+     *         pop the stack for left child,
+     *         pop the stack for the right child,
+     *     push this newly formed tree in stack.
+     * after the for loop, the only thing left in stack is the 
+     * tree needed, return it.
      * 
+     * @param postfixExpression postfix expression in {@code String[]} form
+     * @return the root of generated expression tree
      */
     private TreeNode makeTreePostfix(String[] postfixExpression)
+    /**
+     * for every element in postfix expression,
+     *     if it is an operand, push it into stack
+     *     else it is an operator,
+     *         pop the stack for left child
+     *         pop the stack for the right child
+     *     push this newly formed tree in stack
+     * after the for loop, the only thing left in stack is the 
+     * tree needed, return it.
+     */
     {
         Stack operand = new Stack();
 
@@ -671,6 +739,14 @@ class ExpressionTree
         return operand.pop();
     }
 
+    /**
+     * Private method to determine is the given {@code TreeNode} is an operand.<p>
+     * Valid operands are {@code TreeNode} with {@code NodeType.NUMBER} or {@code NodeType.VARIABLE},
+     * or don't have childern.
+     * 
+     * @param toDetermine {@code TreeNode} to be determined
+     * @return {@code true} f the given {@code TreeNode} is an operand
+     */
     private boolean isOperand(TreeNode toDetermine)
     {
         if
@@ -694,14 +770,20 @@ class ExpressionTree
         }
     }
 
+    /**
+     * Private method to determine is the given {@code String} an operator.
+     * 
+     * @param toDetermine {@code String} to be determined
+     * @return {@code true} if the given {@code String} is an valid operator
+     */
     private boolean isOperator(String toDetermine)
     {
         if // operator
         (
-            toDetermine == "+" &&
-            toDetermine == "-" &&
-            toDetermine == "*" &&
-            toDetermine == "^"
+            toDetermine.equals("+") ||
+            toDetermine.equals("-") ||
+            toDetermine.equals("*") ||
+            toDetermine.equals("^") 
         )
         {
             return true;
@@ -712,7 +794,7 @@ class ExpressionTree
         }
     }
 
-        /**
+    /**
      * Print the {@code Tree} object in given traversals.
      * 
      * @param traverseType Specifies the desired traverse type. 
@@ -725,20 +807,15 @@ class ExpressionTree
         switch (traverseType) 
         {
         case 1:
-            System.out.print("\nPreorder traversal: ");
             preOrder(root);
             break;
         case 2:
-            System.out.print("\nInorder traversal:  ");
-            inOrder(root);
+            inOrder(root, false);
             break;
         case 3:
-            System.out.print("\nPostorder traversal: ");
             postOrder(root);
             break;
         }
-
-        System.out.println();
     }
 
     /**
@@ -762,14 +839,30 @@ class ExpressionTree
      * 
      * @param localRoot where to start print
      */
-    private void inOrder(TreeNode localRoot) 
+    private void inOrder(TreeNode localRoot, boolean leftChild) 
     {
         if (localRoot != null) 
         {
-            inOrder(localRoot.getLeftChild());
-            localRoot.printTreeNode();
+            inOrder(localRoot.getRightChild(), false);
+            if (localRoot.getLeftChild()== null && localRoot.getRightChild() == null)
+            {
+                if (leftChild == true)
+                {
+                    localRoot.printTreeNode();
+                    System.out.print(")");
+                }
+                else
+                {
+                    System.out.print("(");
+                    localRoot.printTreeNode();
+                }
+            }
+            else
+            {
+                localRoot.printTreeNode();
+            }
             System.out.print(" ");
-            inOrder(localRoot.getRightChild());
+            inOrder(localRoot.getLeftChild(), true);
         }
     }
 
@@ -789,117 +882,129 @@ class ExpressionTree
         }
     }
 
+    /**
+     * Public simplify method, wrapper of private recursive simlify method.<p>
+     * This method simplifies the current instance of {@code ExpressionTree}.
+     */
     public void simplify()
     {
-        Queue toCheck = new Queue();
-        TreeNode current = this.root;
+        this.root = simplify(this.root);
+    }
 
-        if (this.root == null)
-        {
-            System.out.println("The tree is empty, nothing to simplify.");
-            return;
-        }
-
-        toCheck.enqueue(current);
-
-        while (!toCheck.isEmpty())
-        {
-            TreeNode temp = toCheck.dequeue();
-
+    /**
+     * Private recursive simplify method.<p>
+     * This method calculate the value of numbers and simplify expressions with 0 and 1.
+     * 
+     * @param localRoot {@code ExpressionTree} to be simplified
+     * @return simplified {@code ExpressionTree}
+     */
+    private TreeNode simplify(TreeNode localRoot)
+    {
+        if (localRoot != null)
+        {   
             if 
             (
-                temp.getLeftChild().getNodeType() == NodeType.NUMBER &&
-                temp.getRightChild().getNodeType() == NodeType.NUMBER
+                localRoot.getLeftChild() != null &&
+                localRoot.getRightChild() != null
             )
             {
-                int ans;
-                switch (temp.getOperator()) 
-                {
-                    case '+':
-                        ans = temp.getLeftChild().getValue() + temp.getRightChild().getValue();
-                        temp.setNodeType(NodeType.NUMBER);
-                        temp.setValue(ans);
-                        temp.setLeftChild(null);
-                        temp.setRightChild(null);
-                        break;
-                    case '-':
-                        ans = temp.getLeftChild().getValue() - temp.getRightChild().getValue();
-                        temp.setNodeType(NodeType.NUMBER);
-                        temp.setValue(ans);
-                        temp.setLeftChild(null);
-                        temp.setRightChild(null);
-                        break;
-
-                    case '*':
-                        ans = temp.getLeftChild().getValue() * temp.getRightChild().getValue();
-                        temp.setNodeType(NodeType.NUMBER);
-                        temp.setValue(ans);
-                        temp.setLeftChild(null);
-                        temp.setRightChild(null);
-                        break;
-
-                    case '^':
-                        ans = (int) Math.pow(temp.getLeftChild().getValue(), temp.getRightChild().getValue());
-                        temp.setNodeType(NodeType.NUMBER);
-                        temp.setValue(ans);
-                        temp.setLeftChild(null);
-                        temp.setRightChild(null);
-                        break;
-                }
-            }
-            else if
-            (
-                isOperand(temp.getLeftChild()) &&
-                temp.getRightChild().getNodeType() == NodeType.NUMBER &&
-                temp.getRightChild().getValue() == 1
-            )
-            {
-                temp.setNodeType(temp.getLeftChild().getNodeType());
-                if (temp.getNodeType() == NodeType.NUMBER)
-                {
-                    temp.setValue(temp.getLeftChild().getValue());
-                }
-                else if (temp.getNodeType() == NodeType.VARIABLE)
-                {
-                    temp.setVarName(temp.getLeftChild().getVarName());
-                }
-            }
-            else if
-            (
-                isOperand(temp.getRightChild()) &&
-                temp.getLeftChild().getNodeType() == NodeType.NUMBER &&
-                temp.getLeftChild().getValue() == 1 &&
-                temp.getOperator() != '^'
-            )
-            {
-                temp.setNodeType(temp.getRightChild().getNodeType());
-                if (temp.getNodeType() == NodeType.NUMBER)
-                {
-                    temp.setValue(temp.getRightChild().getValue());
-                }
-                else if (temp.getNodeType() == NodeType.VARIABLE)
-                {
-                    temp.setVarName(temp.getRightChild().getVarName());
-                }
-            }
-            else if
-            (
+                if       // both operand are numbers
                 (
-                    isOperand(temp.getLeftChild()) &&
-                    temp.getRightChild().getNodeType() == NodeType.NUMBER &&
-                    temp.getRightChild().getValue() == 0
+                    localRoot.getLeftChild().getNodeType() == NodeType.NUMBER &&
+                    localRoot.getRightChild().getNodeType() == NodeType.NUMBER
                 )
-                ||
+                {
+                    int ans = -99999;
+    
+                    switch (localRoot.getOperator()) 
+                    {
+                        case '+':
+                            ans = localRoot.getLeftChild().getValue() + localRoot.getRightChild().getValue();
+                            break;
+                        case '-':
+                            ans = localRoot.getLeftChild().getValue() - localRoot.getRightChild().getValue();
+                            ans = Math.abs(ans);
+                            break;
+    
+                        case '*':
+                            ans = localRoot.getLeftChild().getValue() * localRoot.getRightChild().getValue();
+                            break;
+    
+                        case '^':
+                            ans = (int) Math.pow(localRoot.getLeftChild().getValue(), localRoot.getRightChild().getValue());
+                            break;
+                    }
+    
+                    return new TreeNode(ans);
+                }
+                else if  // left child is a tree or variable, right child is 1
                 (
-                    isOperand(temp.getRightChild()) &&
-                    temp.getLeftChild().getNodeType() == NodeType.NUMBER &&
-                    temp.getLeftChild().getValue() == 0
+                    isOperand(localRoot.getLeftChild()) &&
+                    localRoot.getRightChild().getNodeType() == NodeType.NUMBER &&
+                    localRoot.getRightChild().getValue() == 1
                 )
-            )
+                {
+                    if // if multiply or power
+                    (
+                        localRoot.getOperator() == '*' ||
+                        localRoot.getOperator() == '^'
+                    )
+                    {
+                        return localRoot.getLeftChild();
+                    }
+    
+                }
+                // BUG: cannot distinguish 1 ^ X or X ^ 1, will calculate as 1 ^ X
+                // Left child and right child become extreme tricky here, they are exchanged be themself
+                else if  // right child is a tree or variable, left child is 1
+                (
+                    isOperand(localRoot.getRightChild()) &&
+                    localRoot.getLeftChild().getNodeType() == NodeType.NUMBER &&
+                    localRoot.getLeftChild().getValue() == 1
+                )
+                {
+                    if // if multiply 
+                    (
+                        localRoot.getOperator() == '*'
+                    )
+                    {
+                        return localRoot.getRightChild();
+                    }
+                    else if (localRoot.getOperator() == '^')  // or power
+                    {
+                        return new TreeNode(1);
+                    }
+                }
+                else if  // one of the child is 0
+                (
+                    (
+                        isOperand(localRoot.getLeftChild()) &&
+                        localRoot.getRightChild().getNodeType() == NodeType.NUMBER &&
+                        localRoot.getRightChild().getValue() == 0
+                    )
+                    ||
+                    (
+                        isOperand(localRoot.getRightChild()) &&
+                        localRoot.getLeftChild().getNodeType() == NodeType.NUMBER &&
+                        localRoot.getLeftChild().getValue() == 0
+                    )
+                )
+                {
+                    if (localRoot.getOperator() == '*')
+                    {
+                        return new TreeNode(0);
+                    }
+                }
+
+                localRoot.setLeftChild(simplify(localRoot.getLeftChild()));
+                localRoot.setRightChild(simplify(localRoot.getRightChild()));
+            }    
+            else 
             {
-                temp.setNodeType(NodeType.NUMBER);
-                temp.setValue(0);
+                return localRoot;
             }
         }
+        
+        return localRoot;
     }
 }

@@ -738,6 +738,17 @@ class Tree
         }
     }
 
+    /**
+     * Display current instance of binary tree with Breadth-First Traversal.<p>
+     * 
+     *  Create a queue to store nodes to be printed. 
+     *  Put the root node in queue to start.
+     *  While this queue is not empty, 
+     *      dequeue the queue and print it,
+     *      if this node have children, enqueue them.
+     *  Until the queue is empty, that means all Nodes
+     *  are printed.
+     */
     public void displayTreeBFT()
     {
         Queue toPrint = new Queue();
